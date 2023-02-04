@@ -41,19 +41,19 @@ class Solution
     int shortestCommonSupersequence(string X, string Y, int m, int n)
     {
         //code here
-        vector<vector<int>>dp(m+1,vector<int>(n+1,-1));
-        int k=help(m-1,n-1,X,Y,dp);
-        // for(int i=1;i<m+1;i++){
-        //     for(int j=1;j<n+1;j++){
-        //         if(X[i-1]==X[j-1]){
-        //             dp[i][j]=dp[i-1][j-1]+1;
-        //         }else{
-        //             dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
-        //         }
-        //     }
-        // }
+        vector<vector<int>>dp(m+1,vector<int>(n+1,0));
+   
+        for(int i=1;i<m+1;i++){
+            for(int j=1;j<n+1;j++){
+                if(X[i-1]==Y[j-1]){
+                    dp[i][j]=dp[i-1][j-1]+1;
+                }else{
+                    dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
+                }
+            }
+        }
        
-        return X.length()+Y.length()-(k);
+        return X.length()+Y.length()-(dp[m][n]);
     }
 };
 

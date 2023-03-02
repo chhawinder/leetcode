@@ -9,23 +9,24 @@ class Solution {
     vector<int> bfsOfGraph(int V, vector<int> adj[]) {
         // Code here
         queue<int>q;
+       vector<int> visited(V,0);
+       visited[0]=1;
         q.push(0);
-       vector<int>visited(V,0);
-       vector<int>res;
-       while(q.size()!=0){
-           int top=q.front();
-           q.pop();
-           if(visited[top]==0){
-               res.push_back(top);
-               for(int i=0;i<adj[top].size();i++){
-                   if(visited[adj[top][i]]==0)q.push(adj[top][i]);
-               }
-               visited[top]=1;
-           }
-           
-           
-       }
-       return res;
+        vector<int>res;
+        while(q.size()!=0){
+            int temp=q.front();
+            q.pop();
+            res.push_back(temp);
+            
+            for(int i=0;i<adj[temp].size();i++){
+                if(visited[adj[temp][i]]==0){
+                    visited[adj[temp][i]]=1;
+                    
+                    q.push(adj[temp][i]);
+                }
+            }
+        }
+        return res;
     }
 };
 

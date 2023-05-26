@@ -8,68 +8,56 @@ using namespace std;
 // } Driver Code Ends
 //User function template in C++
 
-  class Solution 
+class Solution 
 {
     public:
-    bool isAllocation(int barrier,int A[],int N , int M){
-        int pages =0;
-        int no_of_allocated_students=1;
-        for(int i=0;i<N;i++){
-            if(A[i]>barrier){
+   bool isValid(int arr[], int n, int m, int limit) {
+    int s = 0;
+    int k = 1;
+    for (int i = 0; i < n; i++) {
+            if(arr[i]>limit){
                 return false ;
-            }
-            else{
-                if(pages+A[i]<=barrier){
-                    pages = pages + A[i];
-                }
-                else{
-                    pages = 0;
-                    
-                    no_of_allocated_students +=1;
-                    pages = pages + A[i];
-                }
-            }
+            }else{
+                s += arr[i];
+        if (s > limit) {
+            s = arr[i];
+            k++;
         }
-        if(no_of_allocated_students <=M){
-            return true;
-        }
-        else{
+        if (k > m) {
             return false;
         }
     }
-    //Function to find minimum number of pages.
-    int findPages(int A[], int N, int M) 
-    {
-        if(M>N){
-            return -1;
-        }
-        int low =A[0];
-        for(int i=1;i<N;i++){
-            if(A[i]<low){
-                low = A[i];
-            }
-        }
-        int high=0;
-        for(int i=0;i<N;i++){
-            high = high + A[i];
-        }
-        int res=-1;
-        while(low<=high){
-            int mid = (low+high)/2;
-            if(isAllocation(mid,A,N,M)==true){
-                res=mid;
-                high = mid-1;
-            }
-            else{
-                low = mid + 1;
-            }
-        }
-       return res;
+
+        
     }
+    return true;
+}
+
+int findPages(int A[], int N, int M) {
+    int mx = INT_MIN;
+    int sum = 0;
+    if(N<M)return -1;
+    for (int i = 0; i < N; i++) {
+        sum += A[i];
+        mx = max(mx, A[i]);
+    }
+    int s = mx; // Minimum possible value is the maximum element in the array
+    int e = sum; // Maximum possible value is the sum of all elements in the array
+    int res = -1;
+    while (s <= e) {
+        int mid = (s + (e) )/ 2;
+        if (isValid(A, N, M, mid)) {
+            res = mid;
+            e = mid - 1;
+        } else {
+            s = mid + 1;
+        }
+    }
+    return res;
+}
+
+
 };
-
-
-
 
 //{ Driver Code Starts.
 

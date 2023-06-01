@@ -12,35 +12,35 @@
 class Solution {
 public:
     vector<vector<int>> verticalTraversal(TreeNode* root) {
-        vector<vector<int>> res;
-        map<int, map<int, multiset<int>>> m; // {horizontalDistance: {depth: values}}
-        queue<pair<TreeNode*, pair<int, int>>> q;
-        q.push({root, {0, 0}}); // {TreeNode*, {horizontalDistance, depth}}
-        
-        while (!q.empty()) {
-            TreeNode* node = q.front().first;
-            int hd = q.front().second.first;
-            int depth = q.front().second.second;
-            q.pop();
-            
-            m[hd][depth].insert(node->val);
-            
-            if (node->left != nullptr)
-                q.push({node->left, {hd - 1, depth + 1}});
-            
-            if (node->right != nullptr)
-                q.push({node->right, {hd + 1, depth + 1}});
-        }
-        
-        for (auto& it : m) {
-            vector<int> level;
-            for (auto& pair : it.second) {
-                level.insert(level.end(), pair.second.begin(), pair.second.end());
+        queue<pair<TreeNode*,pair<int,int>>>q;
+        q.push({root,{0,0}});
+        map<int,vector<pair<int,int>>>m;
+        while(q.size()){
+            int n=q.size();
+            for(int i=0;i<n;i++){
+                 TreeNode*temp=q.front().first;
+            int l=q.front().second.first;
+            int w=q.front().second.second;q.pop();
+                m[w].push_back({l,temp->val});
+                if(temp->right){
+                    q.push({temp->right,{l+1,w+1}});
+                }
+                if(temp->left){
+                    q.push({temp->left,{l+1,w-1}});
+                }
+                
             }
-            res.push_back(level);
+           
         }
-        
+        vector<vector<int>>res;
+        for(auto it:m){
+            sort(it.second.begin(),it.second.end());
+            vector<int>temp;
+            for(auto it1:it.second){
+                temp.push_back(it1.second);
+            }
+            res.push_back(temp);
+        }
         return res;
     }
 };
-

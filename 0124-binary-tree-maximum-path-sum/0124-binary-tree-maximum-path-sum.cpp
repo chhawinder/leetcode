@@ -10,20 +10,22 @@
  * };
  */
 class Solution {
+    int sum;
 public:
-    
-    int max_sum=INT_MIN;
-    int max_gain(TreeNode* root)
-    {
-        if(!root)return 0;
-        int l=max(max_gain(root->left),0);
-        int r=max(max_gain(root->right),0);
-        int new_price=root->val+l+r;
-        max_sum=max(max_sum,new_price);
-        return root->val+max(l,r);
-    }
     int maxPathSum(TreeNode* root) {
-        max_gain(root);
-        return max_sum;
+        sum=INT_MIN;
+        help(root);
+        return sum;
+    }
+    
+    /*** return the max-value-ended-at-root-node ***/
+    int help(TreeNode* root){
+        if(!root)   return 0;
+        int left = max(0, help(root->left));
+        int right = max(0, help(root->right));
+        /*** key parts : embedding the max-value-find in the recursion process ***/
+        sum = max(sum, left+right+root->val);
+        /*** get the max-value-ended-at-root ***/
+        return max(left, right)+root->val;
     }
 };

@@ -9,33 +9,26 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-
 class Solution {
-    
-    public:
- 
-TreeNode* constructFromPrePost(const std::vector<int>& preorder, const std::vector<int>& postorder) {
-        if (preorder.empty())
-            return nullptr;
-
-        TreeNode* root = new TreeNode(preorder[0]);
-
-        if (preorder.size() == 1)
-            return root;
-
-        int leftRootValue = preorder[1];
-        int leftRootIndex = 0;
-        while (postorder[leftRootIndex] != leftRootValue)
-            leftRootIndex++;
-
-        std::vector<int> leftPreorder(preorder.begin() + 1, preorder.begin() + leftRootIndex + 2);
-        std::vector<int> leftPostorder(postorder.begin(), postorder.begin() + leftRootIndex + 1);
-        std::vector<int> rightPreorder(preorder.begin() + leftRootIndex + 2, preorder.end());
-        std::vector<int> rightPostorder(postorder.begin() + leftRootIndex + 1, postorder.end() - 1);
-
-        root->left = constructFromPrePost(leftPreorder, leftPostorder);
-        root->right = constructFromPrePost(rightPreorder, rightPostorder);
-
+public:
+    TreeNode* constructFromPrePost(vector<int>& preorder, vector<int>& postorder) {
+        if(preorder.size()==0)return NULL;
+        TreeNode*root=new TreeNode(preorder[0]);
+        vector<int>lpre,lpost;
+        int i=1;
+        while(i<postorder.size()&&preorder[i]!=postorder[postorder.size()-2]){
+           lpost.push_back(postorder[i-1]);
+            lpre.push_back(preorder[i++]);
+            
+        }
+        root->left=constructFromPrePost(lpre,lpost);
+        vector<int>rpre,rpost;
+        while(i<postorder.size()){
+            rpost.push_back(postorder[i-1]);
+            rpre.push_back(preorder[i++]);
+        }
+        root->right=constructFromPrePost(rpre,rpost);
         return root;
+        
     }
 };

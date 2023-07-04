@@ -1,19 +1,22 @@
 class Solution {
 public:
-    int help(vector<vector<int>>&tree,int index,vector<int>& it){
-        int res=0;
-        for(auto i:tree[index]){
-            res=max(res,help(tree,i,it));
-        }
-        return res+it[index];
+    int help(vector<vector<int>>&tree,int headID, vector<int>& manager, vector<int>& informTime){
+    int res=0;
+    for(auto it:tree[headID]){
+        res=max(res,help(tree,it,manager,informTime));
     }
-    int numOfMinutes(int n, int headID, vector<int>& manager, vector<int>& informTime) {
-        vector<vector<int>>tree(n);
-        for(int i=0;i<manager.size();i++){
-            if(manager[i]!=-1)
+    return res+informTime[headID];
+}
+
+  int numOfMinutes(int n, int headID, vector<int>& manager, vector<int>& informTime) {
+    vector<vector<int>>tree(n);
+    for(int i=0;i<n;i++){
+        if(manager[i]!=-1){
             tree[manager[i]].push_back(i);
         }
-        return help(tree,headID,informTime);
-        
     }
+    int res=help(tree,headID,manager,informTime);
+      return res;
+  }
+
 };

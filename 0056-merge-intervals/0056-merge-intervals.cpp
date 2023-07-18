@@ -1,18 +1,23 @@
 class Solution {
 public:
-    vector<vector<int>> merge(vector<vector<int>>& inter) {
-        sort(inter.begin(),inter.end());
-    vector<vector<int>> res;
-    
-    for (int i = 0; i < inter.size(); i++) {
-        int s = inter[i][0];
-        int cmp = inter[i][1];
-        while (i < inter.size() - 1 && cmp >= inter[i + 1][0]) {
-            cmp = max(cmp, inter[i + 1][1]);
-            i++;
+    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        int i=0;
+        vector<vector<int>>res;
+        sort(intervals.begin(),intervals.end());
+        while(i<intervals.size()){
+            int l=intervals[i][0];
+            int h=intervals[i][1];
+            int k=i;
+            while(k<intervals.size()-1&&h>=intervals[k+1][0]){
+                h=max(h,intervals[k+1][1]);
+                k++;
+                cout<<k<<" "<<i<<" ";
+            }cout<<endl;
+            if(k==i)i++;
+            else i=k+1;
+            res.push_back({l,h});
+            
         }
-        res.push_back({s, cmp});
-    }
-    return res;
+        return res;
     }
 };

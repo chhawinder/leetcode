@@ -9,49 +9,38 @@
  */
 class Solution {
 public:
-    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
-        unordered_map<TreeNode*,TreeNode*>p;
-        unordered_map<TreeNode*,bool>vis;
-        queue<TreeNode*>q;
-        q.push(root);
-        while(q.size()!=0){
-            TreeNode*curr=q.front();q.pop();
-            if(curr->left){
-                q.push(curr->left);
-                p[curr->left]=curr;
-            }
-            if(curr->right){
-                q.push(curr->right);
-                p[curr->right]=curr;
-            }
+    void maping(TreeNode* root,map<TreeNode*,TreeNode*>&m,TreeNode*par){
+        if(root==nullptr)return;
+        if(par!=nullptr){
+            m[root]=par;
         }
+        maping(root->left,m,root);
+        maping(root->right,m,root);
+        return ;
+    }
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
+        map<TreeNode*,TreeNode*>m;
+        maping(root,m,nullptr);
+        queue<TreeNode*>q;
         q.push(target);
-        vis[target]=true;
-        int level=0;
-        while(q.size()){
+        set<TreeNode*>vis;
+        while(k--){
             int n=q.size();
-            if(level++==k)break;
-            for(int i=0;i<n;i++){
-                TreeNode*curr=q.front();q.pop();
-               if(curr->left && !vis[curr->left]) {
-                    q.push(curr->left);
-                    vis[curr->left] = true;
-                }
-                if(curr->right && !vis[curr->right]) {
-                    q.push(curr->right);
-                    vis[curr->right] = true;
-                }
-                if(p[curr]&&vis[p[curr]]==false){
-                    q.push(p[curr]);
-                    vis[p[curr]]=true;
-                }
+            while(n--){
+                TreeNode*temp=q.front();q.pop();
+                vis.insert(temp);
+                if(temp->left&&vis.find(temp->left)==vis.end())q.push(temp->left);
+                if(temp->right&&vis.find(temp->right)==vis.end())q.push(temp->right);
+                if(m[temp]&&vis.find(m[temp])==vis.end())q.push(m[temp]);
+
+                
             }
+            
         }
         vector<int>res;
         while(q.size()){
-            res.push_back(q.front()->val);q.pop();
+            TreeNode*temp=q.front();q.pop();res.push_back(temp->val);
         }
         return res;
-        
     }
 };

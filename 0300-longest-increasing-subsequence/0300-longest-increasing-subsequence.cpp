@@ -1,38 +1,19 @@
 class Solution {
-private:
-    int findLIS(vector<int>& nums, int prevIdx, int currIdx, vector<vector<int>>& dp) {
-        if (currIdx == nums.size()) {
-            return 0;
-        }
-        if (dp[prevIdx + 1][currIdx] != -1) {
-            return dp[prevIdx + 1][currIdx];
-        }
-        int length = 0;
-        if (prevIdx == -1 || nums[prevIdx] < nums[currIdx]) {
-            length = max(1 + findLIS(nums, currIdx, currIdx + 1, dp), findLIS(nums, prevIdx, currIdx + 1, dp));
-        }
-        else {
-            length = findLIS(nums, prevIdx, currIdx + 1, dp);
-        }
-        return dp[prevIdx + 1][currIdx] = length;
-    }
-
 public:
-    int lengthOfLIS(vector<int>& arr) {
-        // dp[i][j] stores the length of the longest increasing subsequence ending at index j, where the previous element is at index i
-        int n=arr.size();
-          vector<int>dp(n,1);
-    for(int i=0;i<n;i++){
-        for(int pre=0;pre<i;pre++){
-                if(arr[pre]<arr[i]){
-                    dp[i]=max(dp[i],1+dp[pre]);
-                }
+    int help(vector<int>& nums,int prev,int curr,vector<vector<int>>&dp){
+        if(curr==nums.size())return 0;
+        if(prev!=-1&&dp[prev+1][curr]!=-1)return dp[prev+1][curr];
+        // take
+        int take=0;
+        if(prev==-1||nums[curr]>nums[prev]){
+            take=help(nums,curr,curr+1,dp)+1;
         }
+        // ntake
+        int ntake=help(nums,prev,curr+1,dp);
+        return dp[prev+1][curr]=max(take,ntake);
     }
-    int res=0;
-    for(int i=0;i<n;i++){
-        res=max(res,dp[i]);
-    }
-    return res;
+    int lengthOfLIS(vector<int>& nums) {
+        vector<vector<int>>dp(nums.size()+1,vector<int>(nums.size()+1,-1));
+        return help(nums,-1,0,dp);
     }
 };
